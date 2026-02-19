@@ -13,6 +13,7 @@ struct ContentView: View {
     private var session = LanguageModelSession()
     
     @State private var response: String = ""
+    @State private var isLoading: Bool = false
     
     var body: some View {
         VStack {
@@ -20,10 +21,16 @@ struct ContentView: View {
             switch largeLanguageModel.availability {
             case .available:
                 if response.isEmpty{
-                    Text("Tap the button to get a fun response.")
-                        .foregroundStyle(.tertiary)
-                        .multilineTextAlignment(.center)
-                        .font(.title)
+                    if isLoading {
+                        ProgressView()
+                    }
+                    else {
+                        Text("Tap the button to get a fun response.")
+                            .foregroundStyle(.tertiary)
+                            .multilineTextAlignment(.center)
+                            .font(.title)
+                    }
+                    
                 }
                 else {
                     Text(response)
@@ -45,6 +52,8 @@ struct ContentView: View {
             Button {
                 // Action
                 Task{
+                    isLoading = true
+                    defer {isLoading = false }
                     let prompt = "Hello, how can I help you today?"
                     do {
                         let replay = try await session.respond(to: prompt)
