@@ -19,10 +19,18 @@ struct ContentView: View {
             Spacer()
             switch largeLanguageModel.availability {
             case .available:
-                Text(response)
-                    .multilineTextAlignment(.center)
-                    .font(.largeTitle)
-                    .bold()
+                if response.isEmpty{
+                    Text("Tap the button to get a fun response.")
+                        .foregroundStyle(.tertiary)
+                        .multilineTextAlignment(.center)
+                        .font(.title)
+                }
+                else {
+                    Text(response)
+                        .multilineTextAlignment(.center)
+                        .font(.largeTitle)
+                        .bold()
+                }
             case .unavailable(.deviceNotEligible):
                 Text("Your device isn't eligible for Apple Intelligence.")
             case .unavailable(.appleIntelligenceNotEnabled):
